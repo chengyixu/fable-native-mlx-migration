@@ -1,3 +1,25 @@
+---
+pretty_name: "From GGUF to Native MLX: A Reproducible Fable Migration and the Memory Policy That Blocked It"
+license: mit
+language:
+  - en
+tags:
+  - apple-silicon
+  - mlx
+  - quantization
+  - speculative-decoding
+  - local-deployment
+  - memory-policy
+  - deployment-report
+task_categories:
+  - text-generation
+size_categories:
+  - n<1K
+configs:
+  - config_name: default
+    data_files: results/processed/evidence.json
+---
+
 # From GGUF to Native MLX
 
 A reproducible migration of the TURBO-Fable 27B checkpoint to native MLX on an
