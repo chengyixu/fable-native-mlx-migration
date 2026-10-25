@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+paper/main.aux
+paper/main.log
+paper/main.out
+paper/main.xdv
+paper/main.synctex.gz
+build*.log

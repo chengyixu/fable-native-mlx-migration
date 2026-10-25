@@ -1,0 +1,724 @@
+{
+  "schema_version": 1,
+  "title": "Fable MLX migration and native memory-policy study (sanitized evidence)",
+  "authors": [
+    "Chengyi Xu",
+    "Nexora"
+  ],
+  "brand": "Nexora Research",
+  "scope": "Descriptive deployment engineering on one Apple M4 Max 64 GiB host. Whitelisted finite scalars only; no prompts, tool output, repository source, transcripts, credentials or local absolute paths.",
+  "qualification": {
+    "minimum_20_tps_met": false,
+    "actual_near_limit_context_met": false,
+    "peer_review_claimed": false,
+    "ranked_intelligence_claimed": false
+  },
+  "checkpoint": {
+    "conversion": {
+      "all_hashes_verified": true,
+      "index_header_parity": true,
+      "payload_bytes": 16054262240,
+      "shards": 31,
+      "output_tensors": 2180,
+      "inference_qualified": false
+    },
+    "nonquantized_tensor_parity": 686,
+    "quantized_rows_verified": [
+      "lm_head.weight",
+      "model.language_model.embed_tokens.weight",
+      "model.language_model.layers.0.mlp.up_proj.weight",
+      "model.language_model.layers.31.self_attn.q_proj.weight",
+      "model.language_model.layers.63.mlp.down_proj.weight",
+      "model.language_model.layers.0.linear_attn.in_proj_a.weight"
+    ],
+    "module_layout": {
+      "module_parameters": 2180,
+      "checkpoint_tensors": 2180,
+      "missing": [],
+      "extra": []
+    },
+    "tokenizer": {
+      "tokenizer_parity_cases": 5,
+      "chat_template_parity": true,
+      "vocab_size": 248077
+    },
+    "mtp_tensors": 4,
+    "source_tensor_categories": {
+      "quantized": 53786705920,
+      "raw": 926751200
+    },
+    "cpu_arithmetic": {
+      "probes": [
+        {
+          "probe": "quantized_projection",
+          "tensor": "language_model.model.layers.0.linear_attn.in_proj_a.weight",
+          "rows": 48,
+          "output_shape": [
+            2,
+            48
+          ],
+          "finite": true,
+          "layout_parity_arithmetic_dtype": "float32",
+          "max_abs_error": 0.0,
+          "max_abs_error_over_peak": 0.0,
+          "cpu_bf16_vs_float32_max_abs_error": 0.04802227020263672,
+          "cpu_bf16_vs_float32_error_over_peak": 0.08196694626529911,
+          "bf16_cpu_inference_parity_claimed": false
+        },
+        {
+          "probe": "quantized_projection",
+          "tensor": "language_model.model.layers.0.mlp.up_proj.weight",
+          "rows": 8,
+          "output_shape": [
+            2,
+            8
+          ],
+          "finite": true,
+          "layout_parity_arithmetic_dtype": "float32",
+          "max_abs_error": 0.0,
+          "max_abs_error_over_peak": 0.0,
+          "cpu_bf16_vs_float32_max_abs_error": 0.01689910888671875,
+          "cpu_bf16_vs_float32_error_over_peak": 0.09710919304014248,
+          "bf16_cpu_inference_parity_claimed": false
+        },
+        {
+          "probe": "quantized_projection",
+          "tensor": "language_model.model.layers.31.self_attn.q_proj.weight",
+          "rows": 8,
+          "output_shape": [
+            2,
+            8
+          ],
+          "finite": true,
+          "layout_parity_arithmetic_dtype": "float32",
+          "max_abs_error": 0.0,
+          "max_abs_error_over_peak": 0.0,
+          "cpu_bf16_vs_float32_max_abs_error": 0.04797554016113281,
+          "cpu_bf16_vs_float32_error_over_peak": 0.12395983490420748,
+          "bf16_cpu_inference_parity_claimed": false
+        },
+        {
+          "probe": "quantized_projection",
+          "tensor": "language_model.lm_head.weight",
+          "rows": 8,
+          "output_shape": [
+            2,
+            8
+          ],
+          "finite": true,
+          "layout_parity_arithmetic_dtype": "float32",
+          "max_abs_error": 0.0,
+          "max_abs_error_over_peak": 0.0,
+          "cpu_bf16_vs_float32_max_abs_error": 0.024335861206054688,
+          "cpu_bf16_vs_float32_error_over_peak": 0.08296674892463154,
+          "bf16_cpu_inference_parity_claimed": false
+        },
+        {
+          "probe": "vision_patch_embed",
+          "output_channels": 8,
+          "native_module": "mlx_vlm.models.qwen3_vl.vision.PatchEmbed",
+          "comparison": "original-source torch Conv3d CPU",
+          "max_abs_error": 4.470348358154297e-08
+        },
+        {
+          "probe": "rmsnorm",
+          "max_abs_error": 0.0
+        }
+      ],
+      "full_model_loaded": false
+    }
+  },
+  "synthetic_conditions": [
+    {
+      "condition": "vlm-bf16-8k-mtp-r2",
+      "note": "official mlx-vlm, source MTP depth 3",
+      "engine": "official mlx-vlm0.6.15 single-request stream_generate",
+      "input_tokens": 8159,
+      "prefill_chunk": 512,
+      "draft_cap": null,
+      "greedy_token_parity": true,
+      "trials": [
+        {
+          "label": "plain-bf16-8k-r1",
+          "prompt_tokens": 8159,
+          "generated_tokens": 304,
+          "client_ttft_s": 104.97611337498529,
+          "whole_request_s": 162.76759850000963,
+          "decode_tps": 5.262976903911302,
+          "prompt_tps": 77.73201916141973,
+          "prefill_s": null,
+          "finish_reason": "stop",
+          "mean_accept_len": null,
+          "speculative": false,
+          "peak_memory_gb": 20.14116917
+        },
+        {
+          "label": "mtp-bf16-8k-r1",
+          "prompt_tokens": 8159,
+          "generated_tokens": 304,
+          "client_ttft_s": 128.79297233300167,
+          "whole_request_s": 178.2394790420076,
+          "decode_tps": 6.1612974521236,
+          "prompt_tps": 63.37152852283092,
+          "prefill_s": null,
+          "finish_reason": "stop",
+          "mean_accept_len": null,
+          "speculative": true,
+          "peak_memory_gb": 21.267293006
+        },
+        {
+          "label": "mtp-bf16-8k-r2",
+          "prompt_tokens": 8159,
+          "generated_tokens": 304,
+          "client_ttft_s": 131.55939624999883,
+          "whole_request_s": 183.02554954198422,
+          "decode_tps": 5.93465978136394,
+          "prompt_tps": 62.06290003606183,
+          "prefill_s": null,
+          "finish_reason": "stop",
+          "mean_accept_len": null,
+          "speculative": true,
+          "peak_memory_gb": 21.267293006
+        },
+        {
+          "label": "plain-bf16-8k-r2",
+          "prompt_tokens": 8159,
+          "generated_tokens": 304,
+          "client_ttft_s": 160.08877025000402,
+          "whole_request_s": 222.19043799999054,
+          "decode_tps": 4.898642471265894,
+          "prompt_tps": 50.9803243978447,
+          "prefill_s": null,
+          "finish_reason": "stop",
+          "mean_accept_len": null,
+          "speculative": false,
+          "peak_memory_gb": 21.267293006
+        }
+      ]
+    },
+    {
+      "condition": "dspark-dflash-8k-cpuoff-r3",
+      "note": "mlx-dspark 0.19.0 DFlash2, cpu co-prefill off",
+      "engine": "mlx-dspark0.19.0/mlx-lm0.31.3 native target",
+      "input_tokens": 8159,
+      "prefill_chunk": 512,
+      "draft_cap": 2,
+      "greedy_token_parity": true,
+      "trials": [
+        {
+          "label": "plain-kernel-warm-uncached-r1",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 122.08844337498886,
+          "whole_request_s": 177.38978108298033,
+          "decode_tps": 5.426999504833084,
+          "prompt_tps": null,
+          "prefill_s": 120.5183618068695,
+          "finish_reason": "stop",
+          "mean_accept_len": 1.0,
+          "speculative": false,
+          "peak_memory_gb": 19.955752714
+        },
+        {
+          "label": "dflash-kernel-warm-uncached-r2",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 111.01724191597896,
+          "whole_request_s": 147.69817541597877,
+          "decode_tps": 8.381997361317895,
+          "prompt_tps": null,
+          "prefill_s": 110.4431517124176,
+          "finish_reason": "stop",
+          "mean_accept_len": 2.432,
+          "speculative": false,
+          "peak_memory_gb": 19.955752714
+        },
+        {
+          "label": "dflash-kernel-warm-uncached-r3",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 128.87585504198796,
+          "whole_request_s": 165.01840379199712,
+          "decode_tps": 8.422555609086373,
+          "prompt_tps": null,
+          "prefill_s": 128.46304893493652,
+          "finish_reason": "stop",
+          "mean_accept_len": 2.432,
+          "speculative": false,
+          "peak_memory_gb": 19.955752714
+        },
+        {
+          "label": "plain-kernel-warm-uncached-r4",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 125.64911129200482,
+          "whole_request_s": 182.6515991249762,
+          "decode_tps": 5.257244317633047,
+          "prompt_tps": null,
+          "prefill_s": 124.17085480690002,
+          "finish_reason": "stop",
+          "mean_accept_len": 1.0,
+          "speculative": false,
+          "peak_memory_gb": 19.955752714
+        }
+      ]
+    },
+    {
+      "condition": "dspark0203-dflash-8k-r5",
+      "note": "mlx-dspark 0.20.3 DFlash2, newer kernels",
+      "engine": "mlx-dspark0.20.3/mlx-lm native target",
+      "input_tokens": 8159,
+      "prefill_chunk": 512,
+      "draft_cap": 7,
+      "greedy_token_parity": true,
+      "trials": [
+        {
+          "label": "plain-kernel-warm-uncached-r1",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 93.41444374999264,
+          "whole_request_s": 144.00970491598127,
+          "decode_tps": 5.954517594629685,
+          "prompt_tps": null,
+          "prefill_s": 91.41913199424744,
+          "finish_reason": "stop",
+          "mean_accept_len": 1.0,
+          "speculative": false,
+          "peak_memory_gb": 22.608650002
+        },
+        {
+          "label": "dflash-kernel-warm-uncached-r2",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 132.50691062500118,
+          "whole_request_s": 191.23310333301197,
+          "decode_tps": 5.191894464897443,
+          "prompt_tps": null,
+          "prefill_s": 131.89454698562622,
+          "finish_reason": "stop",
+          "mean_accept_len": 3.6626506024096384,
+          "speculative": false,
+          "peak_memory_gb": 22.608650002
+        },
+        {
+          "label": "dflash-kernel-warm-uncached-r3",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 133.21407024998916,
+          "whole_request_s": 179.3566042079765,
+          "decode_tps": 6.594742434146781,
+          "prompt_tps": null,
+          "prefill_s": 131.47621893882751,
+          "finish_reason": "stop",
+          "mean_accept_len": 3.6626506024096384,
+          "speculative": false,
+          "peak_memory_gb": 22.608650002
+        },
+        {
+          "label": "plain-kernel-warm-uncached-r4",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 104.81211312502273,
+          "whole_request_s": 147.51197908402537,
+          "decode_tps": 7.047321095238196,
+          "prompt_tps": null,
+          "prefill_s": 103.32217288017273,
+          "finish_reason": "stop",
+          "mean_accept_len": 1.0,
+          "speculative": false,
+          "peak_memory_gb": 22.608650002
+        }
+      ]
+    },
+    {
+      "condition": "dspark019-dflash-8k-prefill2048-r6",
+      "note": "mlx-dspark 0.19.0 DFlash2, 2048-row prefill",
+      "engine": "mlx-dspark0.19.0/mlx-lm native target",
+      "input_tokens": 8159,
+      "prefill_chunk": 2048,
+      "draft_cap": 2,
+      "greedy_token_parity": true,
+      "trials": [
+        {
+          "label": "plain-kernel-warm-uncached-r1",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 136.21422649998567,
+          "whole_request_s": 216.5140592919779,
+          "decode_tps": 3.758474310856452,
+          "prompt_tps": null,
+          "prefill_s": 135.41616702079773,
+          "finish_reason": "stop",
+          "mean_accept_len": 1.0,
+          "speculative": false,
+          "peak_memory_gb": 21.00163343
+        },
+        {
+          "label": "dflash-kernel-warm-uncached-r2",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 129.62164749999647,
+          "whole_request_s": 174.356214792002,
+          "decode_tps": 6.810897111327152,
+          "prompt_tps": null,
+          "prefill_s": 127.09488821029663,
+          "finish_reason": "stop",
+          "mean_accept_len": 2.432,
+          "speculative": false,
+          "peak_memory_gb": 21.20971023
+        },
+        {
+          "label": "dflash-kernel-warm-uncached-r3",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 113.42706087499391,
+          "whole_request_s": 149.5247913330095,
+          "decode_tps": 8.442887881644241,
+          "prompt_tps": null,
+          "prefill_s": 112.39539980888367,
+          "finish_reason": "stop",
+          "mean_accept_len": 2.432,
+          "speculative": false,
+          "peak_memory_gb": 21.20971023
+        },
+        {
+          "label": "plain-kernel-warm-uncached-r4",
+          "prompt_tokens": 0,
+          "generated_tokens": 304,
+          "client_ttft_s": 116.92647933299304,
+          "whole_request_s": 192.31312099998468,
+          "decode_tps": 3.862188222236827,
+          "prompt_tps": null,
+          "prefill_s": 112.55034184455872,
+          "finish_reason": "stop",
+          "mean_accept_len": 1.0,
+          "speculative": false,
+          "peak_memory_gb": 21.20971023
+        }
+      ]
+    }
+  ],
+  "speculative_repairs": [
+    {
+      "run": "mtp-bf16-real-repair-r3",
+      "speculation": "mtp",
+      "trained_mtp": true,
+      "completed": false,
+      "elapsed_s": 900.8594455409911,
+      "timed_out": true,
+      "tool_calls": 4,
+      "tool_errors": 0,
+      "independent_gate_pass": false,
+      "full_suite_pass": false,
+      "source_restored": false,
+      "context_capacity_configured": 262144,
+      "actual256k_qualified": false,
+      "initial_input_tokens": 25778,
+      "initial_ttft_s": 481.8203816250025,
+      "turn_decode_tps": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "run": "dflash-bf16-real-repair-r4",
+      "speculation": "dflash",
+      "trained_mtp": false,
+      "completed": false,
+      "elapsed_s": 901.0383142500068,
+      "timed_out": true,
+      "tool_calls": 6,
+      "tool_errors": 0,
+      "independent_gate_pass": false,
+      "full_suite_pass": false,
+      "source_restored": false,
+      "context_capacity_configured": 262144,
+      "actual256k_qualified": false,
+      "initial_input_tokens": 25778,
+      "initial_ttft_s": 516.5243808749947,
+      "turn_decode_tps": [
+        null,
+        null,
+        null
+      ]
+    }
+  ],
+  "reviewed_summary": {
+    "smoke_plain_tps": [
+      28.480564250854442,
+      28.057407259569406,
+      27.40208337883812
+    ],
+    "smoke_mtp_tps": 35.24721856835835,
+    "smoke_greedy_parity": true,
+    "short_input_tokens": 74,
+    "repair_backend_metrics": [
+      {
+        "prompt_tokens": 25370,
+        "completion_tokens": 105,
+        "prompt_eval_time_s": 471.520998461041,
+        "ttft_s": 472.95066158300324,
+        "decode_tok_s": 5.659643092263302,
+        "peak_memory_gb": 23.375961578,
+        "thinking_enabled": true,
+        "reasoning_tokens": 0,
+        "apc_enabled": true,
+        "tool_parser": "qwen3_coder"
+      },
+      {
+        "prompt_tokens": 26516,
+        "completion_tokens": 78,
+        "prompt_eval_time_s": 23.544484124009614,
+        "ttft_s": 25.1138853750017,
+        "decode_tok_s": 5.5885622550413565,
+        "peak_memory_gb": 28.34388607,
+        "thinking_enabled": true,
+        "reasoning_tokens": 0,
+        "apc_enabled": true,
+        "tool_parser": "qwen3_coder"
+      },
+      {
+        "prompt_tokens": 30072,
+        "completion_tokens": 1146,
+        "prompt_eval_time_s": 71.08769408497028,
+        "ttft_s": 72.95578383299289,
+        "decode_tok_s": 4.791239900155148,
+        "peak_memory_gb": 30.414096174,
+        "thinking_enabled": true,
+        "reasoning_tokens": 0,
+        "apc_enabled": true,
+        "tool_parser": "qwen3_coder"
+      }
+    ],
+    "all_windows_restored": true
+  },
+  "memory_policy": {
+    "observed": {
+      "kernel_free_target_bytes": 65536000,
+      "floors": [
+        3435973836,
+        1717986918
+      ],
+      "compressor_bytes": 15490990080,
+      "available_bytes": 9586573312,
+      "free_bytes": 1472839680
+    },
+    "refusal_before_switch": {
+      "completed": false,
+      "prefill_chunk": 128,
+      "error_class": "runtime prefill system-memory guard"
+    },
+    "after_supported_switch_off": {
+      "same_input_tokens": 25676,
+      "completed": true,
+      "elapsed_s": 359.84741595800733,
+      "exact_marker": "FABLE_INSTALLED",
+      "prompt_reduced": false
+    },
+    "effective_child_setting": [
+      {
+        "pid": 29156,
+        "system_memory_guard": "0"
+      }
+    ]
+  },
+  "protocol_matrix": {
+    "non_streaming": [
+      {
+        "endpoint": "native",
+        "protocol": "chat",
+        "status": 200,
+        "passed": true
+      },
+      {
+        "endpoint": "native",
+        "protocol": "responses",
+        "status": 200,
+        "passed": true
+      },
+      {
+        "endpoint": "native",
+        "protocol": "anthropic",
+        "status": 200,
+        "passed": true
+      },
+      {
+        "endpoint": "magpie",
+        "protocol": "chat",
+        "status": 200,
+        "passed": true
+      },
+      {
+        "endpoint": "magpie",
+        "protocol": "responses",
+        "status": 200,
+        "passed": true
+      },
+      {
+        "endpoint": "magpie",
+        "protocol": "anthropic",
+        "status": 200,
+        "passed": true
+      }
+    ],
+    "streaming": [
+      {
+        "endpoint": "native",
+        "protocol": "chat",
+        "status": 200,
+        "terminal_received": true,
+        "passed": true
+      },
+      {
+        "endpoint": "native",
+        "protocol": "responses",
+        "status": 200,
+        "terminal_received": true,
+        "passed": true
+      },
+      {
+        "endpoint": "native",
+        "protocol": "anthropic",
+        "status": 200,
+        "terminal_received": true,
+        "passed": true
+      },
+      {
+        "endpoint": "magpie",
+        "protocol": "chat",
+        "status": 200,
+        "terminal_received": true,
+        "passed": true
+      },
+      {
+        "endpoint": "magpie",
+        "protocol": "responses",
+        "status": 200,
+        "terminal_received": true,
+        "passed": true
+      },
+      {
+        "endpoint": "magpie",
+        "protocol": "anthropic",
+        "status": 200,
+        "terminal_received": true,
+        "passed": true
+      }
+    ]
+  },
+  "deployment": {
+    "cutover_ready": true,
+    "unrelated_providers_identical": true,
+    "context_window": 262144,
+    "mtp_depth": 3,
+    "runtime_profile": "turbo",
+    "prefill_chunk": 128,
+    "live_backend_reply_ok": true,
+    "live_gateway_reply_ok": true,
+    "service_idle_verified": true,
+    "image_handoff_restored": true,
+    "normal_switch_verified": true,
+    "retired_logical_bytes": 42386495264,
+    "retired_entry_count": 43
+  },
+  "windows_restored": {
+    "coder390_mlx": [
+      {
+        "window": "dflash-bf16-real-repair-r4",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "dspark-dflash-8k-cpuoff-r3",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "dspark-kv16-8k-cpuoff-r2",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "dspark-kv16-8k-r1",
+        "restored": true,
+        "worker_returncode": -11,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "dspark019-dflash-8k-prefill2048-r6",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "dspark0203-dflash-8k-r5",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "mtp-bf16-real-repair-r2",
+        "restored": true,
+        "worker_returncode": 1,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "mtp-bf16-real-repair-r3",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "plain-repair-r1",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "smoke-window-r1",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      },
+      {
+        "window": "vlm-bf16-8k-mtp-r1",
+        "restored": true,
+        "worker_returncode": null,
+        "timed_out": false,
+        "blocked_before_unload": true
+      },
+      {
+        "window": "vlm-bf16-8k-mtp-r2",
+        "restored": true,
+        "worker_returncode": 0,
+        "timed_out": false,
+        "blocked_before_unload": false
+      }
+    ],
+    "fable_deployment": []
+  },
+  "contention": {
+    "external_start_estimated_during_window": true,
+    "exclusive_execution_proven": false
+  },
+  "final_state": {
+    "fable_promoted": false,
+    "near_limit_qualified": false,
+    "trial_ports_closed": true
+  }
+}

@@ -1,0 +1,4 @@
+# The exporter and its tests use only the Python standard library.
+# Tectonic (>=0.15) is required to rebuild paper/main.tex; it is invoked
+# directly, not through a system TeX distribution.
+tectonic>=0.15

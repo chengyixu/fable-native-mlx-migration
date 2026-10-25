@@ -1,0 +1,55 @@
+cff-version: 1.2.0
+message: "If you use this report or its evidence, cite it as below."
+title: "From GGUF to Native MLX: A Reproducible Fable Migration and the Memory Policy That Blocked It"
+version: 1.0.0
+date-released: 2026-10-25
+license: MIT
+type: report
+abstract: >-
+  A deployment engineering report on migrating the Qwen3.8-27B TURBO-Fable
+  checkpoint from GGUF to a native MLX artifact on an Apple M4 Max with 64 GiB
+  unified memory. It documents a bounded CPU-only conversion with full layout
+  verification, four interleaved speculative-decoding conditions on an
+  8,159-token prompt, two timed-out real agent repair sessions, and a
+  serving-runtime system-memory guard whose documented switch converted a
+  refused ~25k-token prefill into a completed reply. No 20 tok/s floor, ranked
+  intelligence claim, peer review or near-limit context qualification is made.
+authors:
+  - family-names: Xu
+    given-names: Chengyi
+  - name: "Nexora"
+    website: "https://hiklik.ai"
+keywords:
+  - Apple Silicon
+  - MLX
+  - MTPLX
+  - multi-token prediction
+  - DFlash2
+  - quantization
+  - local deployment
+  - memory policy
+preferred-citation:
+  type: report
+  title: "From GGUF to Native MLX: A Reproducible Fable Migration and the Memory Policy That Blocked It"
+  authors:
+    - family-names: Xu
+      given-names: Chengyi
+    - name: "Nexora"
+  year: 2026
+  publisher:
+    name: "Nexora Research"
+references:
+  - type: software
+    title: "MTPLX: native MTP speculative decoding on Apple Silicon"
+    authors:
+      - family-names: Altoukhi
+        given-names: Youssof
+    version: "2.12.2"
+    repository-code: "https://github.com/youssofal/MTPLX"
+  - type: software
+    title: "mlx-dspark: DSpark and DFlash speculative decoding for MLX"
+    authors:
+      - family-names: Rahim
+        given-names: A.
+    version: "0.19.0 and 0.20.3"
+    repository-code: "https://github.com/ARahim3/mlx-dspark"

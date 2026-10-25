@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""Explicit Tectonic compatibility adapter for the skill's compile.py driver.
+Not a claim that a system XeLaTeX distribution is installed. Reject shell escape.
+"""
+import os
+import shutil
+import sys
+
+allowed={'-synctex=1','-interaction=nonstopmode','-file-line-error','-no-shell-escape'}
+files=[]
+for arg in sys.argv[1:]:
+    if arg in allowed:continue
+    if arg.startswith('-'):raise SystemExit('Unsupported compiler option: '+arg)
+    files.append(arg)
+if len(files)!=1:raise SystemExit('Expected exactly one TeX file')
+exe=shutil.which('tectonic')
+if not exe:raise SystemExit('Tectonic is required')
+print('Build backend: Tectonic via explicit compile.py compatibility adapter; shell escape disabled.',flush=True)
+os.execv(exe,[exe,'--untrusted','--keep-logs','--synctex',files[0]])
